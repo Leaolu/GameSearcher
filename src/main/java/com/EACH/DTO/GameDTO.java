@@ -2,7 +2,6 @@ package com.EACH.DTO;
 
 import java.io.Serializable;
 import java.net.URL;
-import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -11,37 +10,27 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public class GameDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	private List<Double[]> prices;
-	private List<String> offerType;
-	private List<Boolean> demo;
-	private URL link;
+	private Double[] prices;
+	private String offerType;
+	private Boolean demo;
 	
-	public GameDTO(List<Double[]> prices, List<String> offerType, List<Boolean> demo, URL link) {
+	public GameDTO(Double[] prices, String offerType, Boolean demo) {
 		this.prices = prices;
 		this.offerType = offerType;
 		this.demo = demo;
-		this.link = link;
 		
 	}
-	public List<Double[]> getPrices() {
+	public Double[] getPrices() {
 		return prices;
 	}
 
-	public List<String> getOfferType() {
+	public String getOfferType() {
 		return offerType;
 	}
 
 
-	public List<Boolean> getDemo() {
+	public Boolean getDemo() {
 		return demo;
-	}
-
-	public URL getLink() {
-		return link;
-	}
-
-	public void setLink(URL link) {
-		this.link = link;
 	}
 
 	@Override

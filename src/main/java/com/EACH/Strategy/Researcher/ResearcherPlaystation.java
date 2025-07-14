@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.EACH.DTO.GameDTO;
 import com.EACH.Exceptions.GameNotFoundException;
+import com.EACH.Exceptions.GameUnavailableException;
 
 @Service
 public class ResearcherPlaystation implements ResearcherStrategy {
@@ -34,13 +35,12 @@ public class ResearcherPlaystation implements ResearcherStrategy {
 	}
 
 	@Override
-	public GameDTO research(String name) {
+	public List<GameDTO> research(String name) {
 		
-		List<Double[]> prices = new ArrayList<>();
-		List<String> offerBranding = new ArrayList<>();
-		List<Boolean> demo = new ArrayList<>();
+		List<GameDTO> games = new ArrayList<>();
 		
 		String formattedName = name.replaceAll("_", "-").toLowerCase();
+		int count = 0;
 		
 		try{
 			URL url = new URI("https://www.playstation.com/pt-br/games/"+formattedName+"/").toURL();
@@ -63,7 +63,8 @@ public class ResearcherPlaystation implements ResearcherStrategy {
 				
 				if(c == 'u'){
 					reader.close();
-					return new GameDTO(prices, offerBranding, demo, url);
+					if(count == 0) throw new GameUnavailableException();
+					return games;
 				}
 				
 				fim = line.indexOf(discount, fim);
@@ -72,13 +73,13 @@ public class ResearcherPlaystation implements ResearcherStrategy {
 				Double originalPrice = Double.parseDouble(priceValue)/100;
 				Double discountPrice = Double.parseDouble(discountValue)/100;
 				Double[] newPrices = {originalPrice, discountPrice};
-				prices.add(newPrices);
+				
 				fim = line.indexOf(offers, fim);
 			 	String offer = readAttribute(fim + 2 + offers.length(), line);
-			 	offerBranding.add(offer);
 			 	
 				String type = readAttribute(line.indexOf("type", fim+110) + 6, line);
-				demo.add(type.contains("TRIAL"));
+				games.add(new GameDTO(newPrices, offer, type.contains("TRIAL")));
+				if(!games.get(count).getOfferType().isEmpty()) count++;
 			}
 			}
 			reader.close();
