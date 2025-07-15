@@ -25,7 +25,7 @@ public class ResearcherXbox implements ResearcherStrategy{
 		
 		char c = line.charAt(index);
 		String value = "";
-		while(c != '+' && c != '<') {
+		while(c != '+' && c != '<' && c != '\"') {
 			value += c;
 			index++;
 			c = line.charAt(index);
@@ -69,38 +69,41 @@ public class ResearcherXbox implements ResearcherStrategy{
 		String formattedName = name.replaceAll("_", "-").toLowerCase();
 		String id = getId(formattedName);
 		List<GameDTO> games = new ArrayList<>();
+		String currency = "";
 		
 		try{
 			URL url = new URI("https://www.xbox.com/pt-br/games/store/"+formattedName+"/"+id).toURL();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-			
 			String line;
 			while((line = reader.readLine()) != null){
 				if(line.contains(noDiscount)) {
+				
+					
 					int index = line.indexOf(noDiscount, 0)+noDiscount.length();
 					Double originalPrice = 0.0;
+					
 					if(' ' == line.charAt(index + noDiscount.length())) {
 						index = line.indexOf(wDiscountOriginal) +4 + wDiscountOriginal.length();
 						
 						originalPrice = Double.valueOf(readUntilPlus(line, index).replace(",", ""))/100;
 						
-						index = line.indexOf(wDiscount, index) + 4 + wDiscount.length();
+						index = line.indexOf(wDiscount, index) + 2 + wDiscount.length();
 						
 						Double discountPrice = Double.valueOf(readUntilPlus(line, index));
 						
 						Double[] prices = {originalPrice, discountPrice};
-						games.add(new GameDTO(prices, "\"NONE\"", false));
+						games.add(new GameDTO(prices, "\"NONE\"", false, currency));
 						
 						}else {
 							index += 4;
 							originalPrice = Double.parseDouble(readUntilPlus(line, index));
 							Double[] prices = {originalPrice, originalPrice};
-							games.add(new GameDTO(prices, "\"NONE\"", false));
+							games.add(new GameDTO(prices, "\"NONE\"", false, currency));
 						}
 					
 					if(line.contains("<title>Game Pass</title>")) {
 						Double[] prices = {originalPrice, 0.0};
-						games.add(new GameDTO(prices, "GAMEPASS", false));
+						games.add(new GameDTO(prices, "GAMEPASS", false, currency));
 					}
 					return games;
 					}
@@ -112,7 +115,7 @@ public class ResearcherXbox implements ResearcherStrategy{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return null;
+		throw new GameNotFoundException();
 	}
 
 }

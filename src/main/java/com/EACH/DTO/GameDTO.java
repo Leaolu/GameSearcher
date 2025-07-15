@@ -1,23 +1,24 @@
 package com.EACH.DTO;
 
 import java.io.Serializable;
-import java.net.URL;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"prices", "offerType", "demo"})
+@JsonPropertyOrder({"prices", "offerType", "demo", "cur"})
 public class GameDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private Double[] prices;
 	private String offerType;
 	private Boolean demo;
+	private String cur;
 	
-	public GameDTO(Double[] prices, String offerType, Boolean demo) {
+	public GameDTO(Double[] prices, String offerType, Boolean demo, String cur) {
 		this.prices = prices;
 		this.offerType = offerType;
 		this.demo = demo;
+		this.cur = cur;
 		
 	}
 	public Double[] getPrices() {
@@ -31,6 +32,10 @@ public class GameDTO implements Serializable{
 
 	public Boolean getDemo() {
 		return demo;
+	}
+	
+	public String getCur() {
+		return cur;
 	}
 
 	@Override

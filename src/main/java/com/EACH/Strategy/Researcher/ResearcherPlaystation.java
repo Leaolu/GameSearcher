@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import com.EACH.DTO.GameDTO;
 import com.EACH.Exceptions.GameNotFoundException;
-import com.EACH.Exceptions.GameUnavailableException;
 
 @Service
 public class ResearcherPlaystation implements ResearcherStrategy {
@@ -22,11 +21,13 @@ public class ResearcherPlaystation implements ResearcherStrategy {
 	private static final String original = "originalPriceValue";
 	private static final String discount = "discountPriceValue";
 	private static final String offers = "offerBranding";
+	private static final String curr = "priceCurrencyCode";
+	
 	
 	private static String readAttribute(int index, String original){
 		String value = "";
 		char c = original.charAt(index);
-		while(c != ','){
+		while(c != ',' && c != '\"'){
 			value += c;
 			index++;
 			c = original.charAt(index);
@@ -63,12 +64,12 @@ public class ResearcherPlaystation implements ResearcherStrategy {
 				
 				if(c == 'u'){
 					reader.close();
-					if(count == 0) throw new GameUnavailableException();
 					return games;
 				}
 				
 				fim = line.indexOf(discount, fim);
 				String discountValue = readAttribute(fim + 2 + discount.length(), line);
+				String currency = readAttribute(line.indexOf(curr, fim)+3+curr.length(), line);
 				
 				Double originalPrice = Double.parseDouble(priceValue)/100;
 				Double discountPrice = Double.parseDouble(discountValue)/100;
@@ -78,7 +79,7 @@ public class ResearcherPlaystation implements ResearcherStrategy {
 			 	String offer = readAttribute(fim + 2 + offers.length(), line);
 			 	
 				String type = readAttribute(line.indexOf("type", fim+110) + 6, line);
-				games.add(new GameDTO(newPrices, offer, type.contains("TRIAL")));
+				games.add(new GameDTO(newPrices, offer, type.contains("TRIAL"), currency));
 				if(!games.get(count).getOfferType().isEmpty()) count++;
 			}
 			}
@@ -89,7 +90,7 @@ public class ResearcherPlaystation implements ResearcherStrategy {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return null;
+		throw new GameNotFoundException();
 	}
 
 }
