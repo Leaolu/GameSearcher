@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.EACH.DTO.GameDTO;
 import com.EACH.Strategy.Researcher.ResearcherNintendo;
 import com.EACH.Strategy.Researcher.ResearcherPlaystation;
+import com.EACH.Strategy.Researcher.ResearcherSteam;
 import com.EACH.Strategy.Researcher.ResearcherStrategy;
 import com.EACH.Strategy.Researcher.ResearcherXbox;
 
@@ -38,6 +39,13 @@ public class GameController implements GameControllerDocs{
 	@GetMapping(value = "/nintendo/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<GameDTO>> findOnNintendo(@PathVariable String name) {
 		researcher = new ResearcherNintendo();
+		List<GameDTO> game =  researcher.research(name);
+		return ResponseEntity.ok(game);
+	}
+	
+	@GetMapping(value = "/steam/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<GameDTO>> findOnSteam(@PathVariable String name) {
+		researcher = new ResearcherSteam();
 		List<GameDTO> game =  researcher.research(name);
 		return ResponseEntity.ok(game);
 	}
