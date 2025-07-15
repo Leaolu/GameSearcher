@@ -17,7 +17,7 @@ import com.EACH.Strategy.Researcher.ResearcherXbox;
 
 @RestController
 @RequestMapping("/api/games/v1")
-public class GameController {
+public class GameController implements GameControllerDocs{
 	
 	ResearcherStrategy researcher;
 	
@@ -27,12 +27,14 @@ public class GameController {
 		List<GameDTO> game =  researcher.research(name);
 		return ResponseEntity.ok(game);
 	}
+	
 	@GetMapping(value = "/xbox/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<GameDTO>> findOnXbox(@PathVariable String name) {
 		researcher = new ResearcherXbox();
 		List<GameDTO> game =  researcher.research(name);
 		return ResponseEntity.ok(game);
 	}
+	
 	@GetMapping(value = "/nintendo/{name}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<GameDTO>> findOnNintendo(@PathVariable String name) {
 		researcher = new ResearcherNintendo();
