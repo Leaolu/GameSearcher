@@ -1,0 +1,60 @@
+button {
+    display: block;
+    height: fit-content;
+    padding: 0;
+    margin: 0;
+    width: fit-content;
+}
+
+.hidden-checkbox {
+    display: none;
+}
+
+.custom-checkbox-image {
+    display: inline-block;
+    cursor: pointer;
+}
+
+#SwitchImage {
+    background-image: url('icons/UncheckedSwitch.png'); /* Default unchecked image */
+    width: 130px; /* Adjust as needed */
+    height: 130px; 
+    background-size: contain;
+}
+
+#SwitchBox:checked + #SwitchImage {
+    background-image: url('icons/Switch2.png'); /* Checked image */
+}
+
+#PSImage {
+    background-image: url('icons/UncheckedPlaystation.png'); /* Default unchecked image */
+    background-size: contain;
+      width: 130px; /* Adjust as needed */
+    height: 100px; 
+}
+
+#PSBox:checked + #PSImage {
+    background-image: url('icons/Playstation.png'); /* Checked image */
+}
+
+#XboxImage {
+    background-image: url('icons/UncheckedXbox.png'); /* Default unchecked image */
+    background-size: contain;
+      width: 130px; /* Adjust as needed */
+    height: 130px; 
+}
+
+#XboxBox:checked + #XboxImage {
+    background-image: url('icons/Xbox.png'); /* Checked image */
+}
+
+#SteamImage {
+    background-image: url('icons/UncheckedSteam.png'); /* Default unchecked image */
+    background-size: contain;
+      width: 130px; /* Adjust as needed */
+    height: 130px; 
+}
+
+#SteamBox:checked + #SteamImage {
+    background-image: url('icons/Steam.png'); /* Checked image */
+}
