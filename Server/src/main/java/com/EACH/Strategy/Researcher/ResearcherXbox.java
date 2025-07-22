@@ -19,7 +19,7 @@ public class ResearcherXbox implements ResearcherStrategy{
 	private static final String search = "SEARCH_GAMES_SEARCHQUERY";
 	private static final String noDiscount = "Price-module__moreText___sNMVr";
 	private static final String wDiscountOriginal = "Price-module__originalPrice___XNCxs";
-	private static final String wDiscount = "Price-module__listedDiscountPrice___A-+ds";
+	private static final String wDiscount = "Price-module__listedDiscountPrice___A-+d5";
 	
 	private static String readUntilPlus(String line, int index) {
 		
@@ -82,12 +82,12 @@ public class ResearcherXbox implements ResearcherStrategy{
 					int index = line.indexOf(noDiscount, 0)+noDiscount.length();
 					Double originalPrice = 0.0;
 					
-					if(' ' == line.charAt(index + noDiscount.length())) {
-						index = line.indexOf(wDiscountOriginal) +4 + wDiscountOriginal.length();
+					if(' ' == line.charAt(index)) {
+						index = line.indexOf(wDiscountOriginal) + 4 + wDiscountOriginal.length();
 						
-						originalPrice = Double.valueOf(readUntilPlus(line, index).replace(",", ""))/100;
+						originalPrice = Double.valueOf(readUntilPlus(line, index).replace(",", ""));
 						
-						index = line.indexOf(wDiscount, index) + 2 + wDiscount.length();
+						index = line.indexOf(wDiscount, index) + 4 + wDiscount.length();
 						
 						Double discountPrice = Double.valueOf(readUntilPlus(line, index));
 						
@@ -111,7 +111,7 @@ public class ResearcherXbox implements ResearcherStrategy{
 		}catch(FileNotFoundException e){
 			throw new GameNotFoundException();
 		}catch(NumberFormatException e) {
-			throw new GameUnavailableException();
+			e.printStackTrace();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
